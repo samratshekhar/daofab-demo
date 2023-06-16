@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 const ChildPage = () => {
     const { parentId } = useParams();
     const [children, setChildren] = useState([]);
+    const { state } = useLocation();
+    const { sender, receiver, totalAmount } = state;
 
     useEffect(() => {
-        fetch(`/api/children?parentId=${parentId}`)
+        fetch(`http://localhost:8080/api/children?parentId=${parentId}`)
             .then(response => response.json())
             .then(data => setChildren(data))
             .catch(error => console.error(error));
@@ -29,9 +31,9 @@ const ChildPage = () => {
                     {children.map(child => (
                         <tr key={child.id}>
                             <td>{child.id}</td>
-                            <td>{child.sender}</td>
-                            <td>{child.receiver}</td>
-                            <td>{child.totalAmount}</td>
+                            <td>{sender}</td>
+                            <td>{receiver}</td>
+                            <td>{totalAmount}</td>
                             <td>{child.paidAmount}</td>
                         </tr>
                     ))}

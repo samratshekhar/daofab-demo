@@ -3,25 +3,42 @@ import { useNavigate } from 'react-router-dom';
 
 const ParentList = () => {
     const [parents, setParents] = useState([]);
-    const [redirectToChildId, setRedirectToChildId] = useState(null);
+    const [redirectToChild, setRedirectToChild] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [pageSize] = useState(2);
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (redirectToChildId) {
-            navigate(`/child/${redirectToChildId}`);
-        }
-    }, [redirectToChildId, navigate]);
+    const indexOfLastParent = currentPage * pageSize;
+    const indexOfFirstParent = indexOfLastParent - pageSize;
+    const currentParents = parents.slice(indexOfFirstParent, indexOfLastParent);
+
+
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/parents')
+        if (redirectToChild) {
+            navigate(
+                `/child/${redirectToChild.id}`,
+                {
+                    state: {
+                        sender: redirectToChild.sender,
+                        receiver: redirectToChild.receiver,
+                        totalAmount: redirectToChild.totalAmount
+                    }
+                }
+            );
+        }
+    }, [redirectToChild, navigate]);
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/parents?page=${currentPage}`)
             .then(response => response.json())
             .then(data => setParents(data))
             .catch(error => console.error(error));
-    }, []);
+    }, [currentPage]);
 
-    const handleTotalPaidAmountClick = parentId => {
-        setRedirectToChildId(parentId);
+    const handleTotalPaidAmountClick = parent => {
+        setRedirectToChild(parent);
     };
 
     return (
@@ -49,6 +66,21 @@ const ParentList = () => {
                     ))}
                 </tbody>
             </table>
+            <div className="pagination">
+                <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 0}
+                >
+                    Previous
+                </button>
+                <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={indexOfLastParent >= parents.length}
+                >
+                    Next
+                </button>
+            </div>
+
         </div>
     );
 };
