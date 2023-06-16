@@ -3,4 +3,4 @@
 2. Install npm
 3. From command-line, navigate to current folder
 4. Run `npm run` to start the react bundler
-5. Navigate to `localhos:3000` from any browser to access the web-app
+5. Navigate to `localhost:3000` from any browser to access the web-app
