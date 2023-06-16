@@ -57,7 +57,9 @@ const ParentList = () => {
                             <td>{parent.id}</td>
                             <td>{parent.sender}</td>
                             <td>{parent.receiver}</td>
-                            <td onClick={() => handleTotalPaidAmountClick(parent)}>
+                            <td
+                                style={{ color: "#00f" }}
+                                onClick={() => handleTotalPaidAmountClick(parent)}>
                                 {parent.totalAmount}
                             </td>
                         </tr>
