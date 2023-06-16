@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daofab.demo.model.Parent;
 import com.daofab.demo.service.ParentService;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 @RestController
 public class ParentController {
 
@@ -25,12 +25,8 @@ public class ParentController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "id") String sortBy) {
         List<Parent> parents = null;
-        try {
-            parents = parentService.getParentData(page, sortBy);
-            log.debug("Parents: ", parents);
-        } catch (Exception e) {
-            log.error(e);
-        }
+        parents = parentService.getParentData(page, sortBy);
+        log.debug("Parents: ", parents);
         if (parents != null) {
             return ResponseEntity.ok().body(parents);
         }

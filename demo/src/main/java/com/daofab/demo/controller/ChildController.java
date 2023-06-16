@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daofab.demo.model.Child;
 import com.daofab.demo.service.ChildService;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 @RestController
 public class ChildController {
 
@@ -24,11 +24,8 @@ public class ChildController {
     public ResponseEntity<List<Child>> getChildren(
             @RequestParam(defaultValue = "1") int parentId) {
         List<Child> children = null;
-        try {
-            children = childService.getChildData(parentId);
-        } catch (Exception e) {
-            log.error(e);
-        }
+        children = childService.getChildData(parentId);
+        log.debug("Children: ", children);
         if (children != null) {
             return ResponseEntity.ok().body(children);
         }

@@ -13,6 +13,9 @@ import com.daofab.demo.model.Parent;
 import com.daofab.demo.model.ParentData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ParentServiceFileImpl implements ParentService {
 
@@ -22,9 +25,17 @@ public class ParentServiceFileImpl implements ParentService {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Parent> getParentData(int page, String sortBy) throws IOException {
-        List<Parent> parents = readDataFromFile();
+    public List<Parent> getParentData(int page, String sortBy) {
+        List<Parent> parents = null;
 
+        try {
+            parents = readDataFromFile();
+        } catch (Exception e) {
+            log.error("Error in reading parent.json", e);
+        }
+        if (parents == null) {
+            return null;
+        }
         // Apply sorting
         parents.sort((p1, p2) -> {
             if (sortBy.equals("id")) {

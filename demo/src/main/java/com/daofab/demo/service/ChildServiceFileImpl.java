@@ -14,6 +14,9 @@ import com.daofab.demo.model.Child;
 import com.daofab.demo.model.ChildData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ChildServiceFileImpl implements ChildService {
 
@@ -22,9 +25,18 @@ public class ChildServiceFileImpl implements ChildService {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Child> getChildData(int parentId) throws IOException {
-        List<Child> children = readDataFromFile();
+    public List<Child> getChildData(int parentId) {
+        List<Child> children = null;
+        try {
+            children = readDataFromFile();
+        } catch (Exception e) {
+            log.error("Error in reading child.json", e);
+        }
+        if (children == null) {
+            return null;
+        }
         return children.stream().filter(child -> child.getParentId() == parentId).collect(Collectors.toList());
+
     }
 
     private List<Child> readDataFromFile() throws IOException {
