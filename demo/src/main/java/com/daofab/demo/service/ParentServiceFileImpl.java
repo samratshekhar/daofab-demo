@@ -11,6 +11,7 @@ import org.springframework.util.ResourceUtils;
 
 import com.daofab.demo.model.Parent;
 import com.daofab.demo.model.ParentData;
+import com.daofab.demo.model.ParentResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class ParentServiceFileImpl implements ParentService {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Parent> getParentData(int page, String sortBy) {
+    public ParentResponse getParentData(int page, String sortBy) {
         List<Parent> parents = null;
 
         try {
@@ -49,7 +50,10 @@ public class ParentServiceFileImpl implements ParentService {
         int fromIndex = page * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, parents.size());
 
-        return parents.subList(fromIndex, toIndex);
+        ParentResponse response = new ParentResponse();
+        response.setData(parents.subList(fromIndex, toIndex));
+        response.setTotalPage((int) Math.ceil((double) parents.size() / (double) pageSize));
+        return response;
     }
 
     private List<Parent> readDataFromFile() throws IOException {

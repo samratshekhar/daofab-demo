@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daofab.demo.model.Parent;
+import com.daofab.demo.model.ParentResponse;
 import com.daofab.demo.service.ParentService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +24,13 @@ public class ParentController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("api/parents")
-    public ResponseEntity<List<Parent>> getParents(
+    public ResponseEntity<ParentResponse> getParents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "id") String sortBy) {
-        List<Parent> parents = null;
-        parents = parentService.getParentData(page, sortBy);
-        log.debug("Parents: ", parents);
-        if (parents != null) {
-            return ResponseEntity.ok().body(parents);
+        ParentResponse response = parentService.getParentData(page, sortBy);
+        log.debug("Parents: ", response);
+        if (response != null) {
+            return ResponseEntity.ok().body(response);
         }
         return ResponseEntity.internalServerError().build();
     }

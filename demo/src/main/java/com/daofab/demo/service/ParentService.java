@@ -1,9 +1,7 @@
 package com.daofab.demo.service;
 
-import java.util.List;
-
-import com.daofab.demo.model.Parent;
+import com.daofab.demo.model.ParentResponse;
 
 public interface ParentService {
-    List<Parent> getParentData(int page, String sortBy);
+    ParentResponse getParentData(int page, String sortBy);
 }

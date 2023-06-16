@@ -2,18 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const ParentList = () => {
-    const [parents, setParents] = useState([]);
+    const [parents, setParents] = useState({ data: [], totalPage: 0 });
     const [redirectToChild, setRedirectToChild] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [pageSize] = useState(2);
 
     const navigate = useNavigate();
-
-    const indexOfLastParent = currentPage * pageSize;
-    const indexOfFirstParent = indexOfLastParent - pageSize;
-    const currentParents = parents.slice(indexOfFirstParent, indexOfLastParent);
-
-
 
     useEffect(() => {
         if (redirectToChild) {
@@ -32,15 +26,19 @@ const ParentList = () => {
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/parents?page=${currentPage}`)
-            .then(response => response.json())
-            .then(data => setParents(data))
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                setParents(data)
+            })
             .catch(error => console.error(error));
     }, [currentPage]);
 
     const handleTotalPaidAmountClick = parent => {
         setRedirectToChild(parent);
     };
-
+    var data = parents.data;
+    var totalPage = parents.totalPage
     return (
         <div>
             <h1>Parent List</h1>
@@ -54,7 +52,7 @@ const ParentList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {parents.map(parent => (
+                    {data.map(parent => (
                         <tr key={parent.id}>
                             <td>{parent.id}</td>
                             <td>{parent.sender}</td>
@@ -75,7 +73,7 @@ const ParentList = () => {
                 </button>
                 <button
                     onClick={() => setCurrentPage(currentPage + 1)}
-                    disabled={indexOfLastParent >= parents.length}
+                    disabled={currentPage + 1 >= totalPage}
                 >
                     Next
                 </button>
