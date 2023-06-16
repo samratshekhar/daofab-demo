@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ParentList = () => {
     const [parents, setParents] = useState([]);
+    const [redirectToChildId, setRedirectToChildId] = useState(null);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (redirectToChildId) {
+            navigate(`/child/${redirectToChildId}`);
+        }
+    }, [redirectToChildId, navigate]);
 
     useEffect(() => {
         fetch('http://localhost:8080/api/parents')
@@ -9,6 +19,10 @@ const ParentList = () => {
             .then(data => setParents(data))
             .catch(error => console.error(error));
     }, []);
+
+    const handleTotalPaidAmountClick = parentId => {
+        setRedirectToChildId(parentId);
+    };
 
     return (
         <div>
@@ -28,7 +42,9 @@ const ParentList = () => {
                             <td>{parent.id}</td>
                             <td>{parent.sender}</td>
                             <td>{parent.receiver}</td>
-                            <td>{parent.totalAmount}</td>
+                            <td onClick={() => handleTotalPaidAmountClick(parent)}>
+                                {parent.totalAmount}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
