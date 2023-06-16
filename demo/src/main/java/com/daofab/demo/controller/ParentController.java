@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,8 @@ public class ParentController {
     @Autowired
     private ParentService parentService;
 
-    @GetMapping("/parents")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("api/parents")
     public ResponseEntity<List<Parent>> getParents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "id") String sortBy) {
