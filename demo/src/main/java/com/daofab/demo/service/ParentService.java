@@ -6,5 +6,5 @@ import java.util.List;
 import com.daofab.demo.model.Parent;
 
 public interface ParentService {
-    List<Parent> getParentData() throws IOException;
+    List<Parent> getParentData(int page, String sortBy) throws IOException;
 }
